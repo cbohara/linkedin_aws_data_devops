@@ -1,0 +1,170 @@
+Become an AWS Data and DevOps Specialist
+
+Amazon Web Services Essential Training
+
+horizontal scaling
+add more components/nodes to a system
+ex: add more web servers to deal with increase traffic
+
+veritcal scaling
+resources added to single component/node
+ex: increase CPUs for server
+
+elasticity
+autoscaling = supply always aligns with demand
+
+design for failure
+avoid single points of failure
+decouple components as much as possible
+
+security
+customer responsible for security of application data
+use HTTPS over SSL for data in transit
+protect data at rest using encryption
+all API requests sent over the public internet should be sent over HTTPS
+rather than storing the secret key in code, app should be configured to pass value as input during the launch of the app
+
+use IAM roles 
+rotate keys often
+create users and manage permissions
+
+multiple availability zones (AZ) within a region
+think of as multiple data centers physically isolated from one another and connected by a fast fiber networks
+
+AMI
+template for root volume
+launch permissions
+block device mapping to DB
+design for failure by saving AMI for ease of restoring and cloning environments
+
+Elastic load balancer (ELB)
+balances network traffic across multiple EC2 instances for multiple AZ
+single CNAME (some-elb-name.amazonaws.com) resolves to many ELB IP addresses, and can perform in multiple AZ
+use ELB to distribute your system across multiple resources and AZ
+
+use CloudWatch to monitor for failure
+be aware memory usage is not natively supported with CloudWatch
+
+EBS (elastic block storage)
+persistent data storage attached to EC2 instance
+alternative to temporary local storage
+
+RDS (relational database service)
+managed by AWS
+high availablitity and fault tolerant
+
+autoscaling
+launch configuration - what resources to scale
+autoscaling group - defines where to launch instances and limits
+scaling policy - when and what conditions in which resources should be launched, based on cloudwatch alarms
+
+storage options
+EFS = file storage
+files organized in directory hierarchy
+
+EBS = block storage
+
+S3/Glacier = object storage 
+best for unstructured, non-relational data
+object is any blob of data or files 
+5TB limit per object
+eventual consistency bc of replication across AZ
+
+Elastic Beanstalk
+fully managed FREE service for applications
+only pay for the resources launched
+write and deploy your code
+then beanstalk automatically handles the details of provisioning needed capacity, load balancing, auto scaling, and application health monitoring
+provides URL after setup, which can be typed into a web browser to access the running application
+
+AWS OpsWorks
+2 options
+AWS OpsWorks for Chef Automate
+AWS OpsWorks Stacks - chef configuration recipes are run on the server
+
+CloudFormation
+allows for the definition of an entire application stack to exist as either a single or set of text based template files
+use JSON to specify resources
+parameters object can be defined in the template > declared parameters can be referenced as place holder values for the properties
+actual values will be passed in at the time this template file is being used to create the new resources
+
+CloudFormer
+helps create cloudformation template from an existing stack
+
+CodeDeloy
+not a fully managed service
+component service
+coordinates code deployments to EC2 instances
+
+what to deploy?
+specific revision is specified for each deployment
+revision = specific version of the application, including things like the source code files, or a compiled binary, and all other needed assets
+revisions can be stored in GitHub, or in an AWS S3bucket
+
+how to deploy?
+deployment configuration is the specification that outlines exactly how a deployment should proceed to a defined deployment group
+single configuration file specifically named "AppSpec" to specify how to deploy the application
+
+where to deploy?
+specifying the deployment group
+a deployment group is an EC2 instance, or set of instances, to which the application should be deployed
+
+SNS
+publish-subscribe
+publish message via email/text to multiple subscribers 
+ex: CloudWatch alarm is triggered > publish message to SNS > send email to support team of production issue
+
+SQS
+consumers poll for messages from the queue
+
+SNS + SQS
+can use SNS with SQS to distribute workload in parallel across multiple components 
+ex: upload image > send message topic to SNS > send message to 2 different SQS - one for converting image to PNG and the other to PNG
+
+DynamoDB
+noSQL norelational schemaless 
+data stored on solid-state drives across multiple AZ
+effective for creating stateless servers
+
+Elasticache
+adding in-memory caching layer between application and DB = great for performance
+2 engine options
+Memcached - stores data only as strings (up to 1MB), no persistence, easy to scale
+Redis - can store larger strings as well as other data types (sets, sorted sets, lists, hashes), supports persistence
+
+2 methodologies 
+write-through pattern
+first store in DB and then store in cache
+pro - all data is stored in cache so will find what you need in the cache
+con - more data stored in memory than needed
+can use TTL to expire data over a period of time
+
+lazy load 
+attempt retrieve data in cache, if not found then find in DB and add value into cache 
+pro - only needed data stored in cache
+con - higher miss rate
+
+AWS Cloudfront
+CDN = content delivery network
+CDN is a large network of distributed caching servers that help deliver content to end users in the most performant manner
+store and cache an application's most popular static content at globally distributed edge locations around the world
+
+use AWS CloudSearch if need a search engine for your app
+
+API Gateway
+fully managed
+requests are made through the internet, come into the API gateway, and are then handled in a variety of ways
+ex: gateway responds to that request by executing custom application code residing on an EC2 instance or in Lambda functions
+can support multiple API versions running simultaneously
+release stages can also be managed, such as alpha or beta releases, or development environments, such as test and QA environments
+
+Lambda
+configure 
+- which function (handler) should respond to an event
+- IAM role specifying the permissions given to the lambda function while running
+- compute amount
+- how long the function should run before timing out
+
+event sources
+microservices architecture using API Gateway = request comes to API Gateway > API invokes lambda function
+s3 can be configured to invoke a lambda function when an object is added/updated/copied/deleted within a bucket
