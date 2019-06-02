@@ -2,6 +2,10 @@ Become an AWS Data and DevOps Specialist
 
 Amazon Web Services Essential Training
 
+################################
+overview
+################################
+
 horizontal scaling
 add more components/nodes to a system
 ex: add more web servers to deal with increase traffic
@@ -168,3 +172,44 @@ configure
 event sources
 microservices architecture using API Gateway = request comes to API Gateway > API invokes lambda function
 s3 can be configured to invoke a lambda function when an object is added/updated/copied/deleted within a bucket
+
+policy permissions
+a policy lets us define actions, resources, and effects
+access is denied unless explicitly provided in the policy
+
+actions
+each AWS service has its own set of actions
+ex: list bucket action, which returns information about the items in a bucket
+any actions that you don't explicitly allow are denied
+
+resources
+specify which AWS resources you want to allow the actions on
+ex: what specific S3 buckets the actions can be performed on 
+cannot access any resources that you have not explicitly granted permissions to
+
+effects
+allow or deny
+since default is deny, only really specify allow options
+
+################################
+project - web app with servers
+################################
+
+elastic load balancer > web servers > DB
+
+key-pair required to ssh into EC2 instance
+need to change permissions to read-only
+chmod 400 *.pem
+
+3 security groups
+default security group provided by AWS for VPC
+VPC = virtual private cloud
+by default EC2 instances are launched into VPC = private cloud per account
+
+load balancer security group - allow all HTTP(S) traffic from the internet
+web tier - restrict HTTP traffic on port 80 from the load balancer = use security group ID for the load balancer 
+db tier - allow traffic into DB from web tier only = use security group ID for web tier
+
+launch EC2 instance
+advance details = allows you to specify bootstrap script
+ex: bootstrap.txt
