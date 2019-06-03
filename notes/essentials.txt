@@ -191,6 +191,16 @@ effects
 allow or deny
 since default is deny, only really specify allow options
 
+use cloudwatch to ID appropriate use of EC2 instance types
+choose the right instance for the job
+
+purchase options
+on-demand - pay for when using
+reserved - pay upfront to reduce hourly rates
+spot - deal with non-stateful workloads
+
+take full advantage of AWS managed resources 
+
 ################################
 project - web app with servers
 ################################
