@@ -213,3 +213,28 @@ db tier - allow traffic into DB from web tier only = use security group ID for w
 launch EC2 instance
 advance details = allows you to specify bootstrap script
 ex: bootstrap.txt
+
+################################
+project - serverless web app 
+################################
+
+add index.html to S3 using static hosting option + making publically available to the internet
+
+using lambda blueprint microservice-http-endpoint
+configures API Gateway as a trigger for a Lambda function and manages the create, read, update, and delete operations on a DynamoDB table
+dynamoDB = managed NoSQL solution
+tested the addition to DynamoDB via Lambda API Gateway, and DyanmoDB in the console
+
+API Gateway > actions > deploy API
+tested addition using curl command
+
+Final step - connect the pieces with adding a thing via UI and updating DynamoDB table
+need to enable CORES
+single page web app using JavaScript
+for security reasons browsers restrict cross-origin http requests initiated from within scripts
+CORES mechanism gives web servers cross domain access controls, which enables security cross domain transfers
+need to also update lambda with 'Access-Control-Allow-Origin'
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },

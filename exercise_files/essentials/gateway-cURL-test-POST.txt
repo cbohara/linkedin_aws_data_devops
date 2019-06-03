@@ -1,0 +1,1 @@
+curl -H "Content-Type: application/json" -X POST -d "{ \"TableName\": \"things\",\"Item\": {\"thingid\": \"curltest\"}}" https://qputcaqq40.execute-api.us-east-1.amazonaws.com/test/linkedinDBd
